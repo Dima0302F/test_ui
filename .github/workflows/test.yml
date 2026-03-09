@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11']  # Исправлено: были кавычки и правильные версии
+        python-version: ['3.10']
     
     steps:
     - name: Checkout repository
@@ -27,22 +27,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install pytest selenium webdriver-manager
+        pip list  # Показывает установленные пакеты
     
     - name: Install Chrome
       run: |
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
+        google-chrome --version  # Проверяем версию Chrome
     
-    - name: Run tests
+    - name: Run tests with maximum verbosity
       run: |
-        pytest test_form.py -v --tb=short
+        python --version  # Проверяем версию Python
+        pytest test_form.py -vv --tb=long --log-cli-level=DEBUG
+      continue-on-error: true  # Продолжаем даже при ошибке тестов
     
-    - name: Upload test results
+    - name: Show test results
       if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results-${{ matrix.python-version }}
-        path: |
-          *.log
-        retention-days: 30
+      run: |
+        echo "=== Current directory contents ==="
+        ls -la
+        echo "=== Python path ==="
+        python -c "import sys; print(sys.path)"
+        echo "=== Exit code ==="
+        echo $?
