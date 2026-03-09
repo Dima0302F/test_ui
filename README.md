@@ -1,4 +1,3 @@
-cat > README.md << 'EOF'
 # Login Tests Automation
 
 Automated tests for the-internet.herokuapp.com login form using Selenium and pytest.
