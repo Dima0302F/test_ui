@@ -1,0 +1,5 @@
+cat > requirements.txt << 'EOF'
+pytest==8.0.0
+selenium==4.17.2
+webdriver-manager==4.0.1
+EOF
